@@ -34,7 +34,7 @@ class NewsBlogMenu(CMSAttachMenu):
 
         if hasattr(self, 'instance') and self.instance:
             app = apphook_pool.get_apphook(self.instance.application_urls)
-            
+
             try:
                 config = app.get_config(self.instance.application_namespace)
                 articles = articles.filter(app_config=config)
