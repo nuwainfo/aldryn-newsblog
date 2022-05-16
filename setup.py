@@ -54,7 +54,7 @@ CLASSIFIERS = [
 ]
 
 setup(
-    name='aldryn-newsblog-Zephyrus5',
+    name='aldryn-newsblog',
     version=__version__,
     author='Divio AG',
     author_email='info@divio.ch',
