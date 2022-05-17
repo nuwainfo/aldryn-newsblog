@@ -10,6 +10,7 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404
 from django.utils import translation
+from django.utils.http import urlquote as django_urlquote
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
@@ -114,7 +115,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
             self.object = self.get_object()
         set_language_changer(request, self.object.get_absolute_url)
         url = self.object.get_absolute_url()
-        if self.config.non_permalink_handling == 200 or request.path == url:
+        if (self.config.non_permalink_handling == 200 or django_urlquote(request.path) == url):
             # Continue as normal
             return super(ArticleDetail, self).get(request, *args, **kwargs)
 
@@ -331,9 +332,19 @@ class AuthorArticleList(ArticleListBase):
 class CategoryArticleList(ArticleListBase):
     """A list of articles filtered by categories."""
     def get_queryset(self):
+        categories = [self.category,]
+        stack = [self.category,]
+
+        while stack:
+            category = stack.pop()
+            children = category.get_children()
+            for child in children:
+                categories.append(child)
+                stack.append(child)
+
         return super(CategoryArticleList, self).get_queryset().filter(
-            categories=self.category
-        )
+            categories__in=categories
+        ).distinct()
 
     def get(self, request, category, *args, **kwargs):
         self.category = get_object_or_404(
@@ -366,6 +377,36 @@ class TagArticleList(ArticleListBase):
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_tag'] = self.tag
+        return super(TagArticleList, self).get_context_data(**kwargs)
+
+
+class NoCategoryArticleList(CategoryArticleList):
+    def get_queryset(self):
+        return super(CategoryArticleList, self).get_queryset().filter(
+            categories=None
+        )
+
+    def get(self, request):
+        return super(CategoryArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_category'] = _("No category")
+        ctx = super(CategoryArticleList, self).get_context_data(**kwargs)
+        ctx['newsblog_category'] = _("No category")
+        return ctx
+
+
+class NoTagArticleList(TagArticleList):
+    def get_queryset(self):
+        return super(TagArticleList, self).get_queryset().filter(
+            tags=None
+        )
+
+    def get(self, request):
+        return super(TagArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_tag'] = _("No tag")
         return super(TagArticleList, self).get_context_data(**kwargs)
 
 

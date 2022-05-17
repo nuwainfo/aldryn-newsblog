@@ -3,8 +3,8 @@ from django.urls import path, re_path
 from aldryn_newsblog.feeds import CategoryFeed, LatestArticlesFeed, TagFeed
 from aldryn_newsblog.views import (
     ArticleDetail, ArticleList, ArticleSearchResultsList, AuthorArticleList,
-    CategoryArticleList, DayArticleList, MonthArticleList, TagArticleList,
-    YearArticleList,
+    CategoryArticleList, DayArticleList, MonthArticleList, NoCategoryArticleList,
+    NoTagArticleList, TagArticleList, YearArticleList,
 )
 
 
@@ -57,3 +57,34 @@ urlpatterns = [
         ArticleDetail.as_view(), name='article-detail'),
 
 ]
+
+urlpatterns += [
+    re_path(r'^(?P<slug>.*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    re_path(r'^(?P<year>\d{4})/(?P<slug>.*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>.*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>.*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+
+    re_path(r'^category/(?P<category>.*)/$',
+        CategoryArticleList.as_view(), name='article-list-by-category'),
+    re_path(r'^category/(?P<category>.*)/feed/$',
+        CategoryFeed(), name='article-list-by-category-feed'),
+
+    re_path(r'^tag/(?P<tag>.*)/$',
+        TagArticleList.as_view(), name='article-list-by-tag'),
+    re_path(r'^tag/(?P<tag>.*)/feed/$',
+        TagFeed(), name='article-list-by-tag-feed'),
+]
+
+urlpatterns.insert(0,
+    re_path(r'^category/no_category/$',
+        NoCategoryArticleList.as_view(), name='article-list-by-no-category')
+)
+
+urlpatterns.insert(0,
+    re_path(r'^tag/no_tag/$',
+        NoTagArticleList.as_view(), name='article-list-by-no-tag')
+)
