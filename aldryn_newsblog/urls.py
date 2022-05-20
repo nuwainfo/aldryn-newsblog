@@ -11,6 +11,13 @@ from aldryn_newsblog.views import (
 urlpatterns = [
     path('',
         ArticleList.as_view(), name='article-list'),
+
+    re_path(r'^category/no_category/$',
+        NoCategoryArticleList.as_view(), name='article-list-by-no-category'),
+
+    re_path(r'^tag/no_tag/$',
+        NoTagArticleList.as_view(), name='article-list-by-no-tag'),
+
     re_path(r'^feed/', LatestArticlesFeed(), name='article-list-feed'),
 
     re_path(r'^search/',
@@ -32,41 +39,15 @@ urlpatterns = [
     re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<pk>\d+)/',
         ArticleDetail.as_view(), name='article-detail'),
 
-    re_path(r'^(?P<year>\d{4})/(?P<slug>\w[-\w]*)/',
-        ArticleDetail.as_view(), name='article-detail'),
-    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>\w[-\w]*)/',
-        ArticleDetail.as_view(), name='article-detail'),
-    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>\w[-\w]*)/',  # flake8: NOQA
-        ArticleDetail.as_view(), name='article-detail'),
-
-    re_path(r'^author/(?P<author>\w[-\w]*)/',
-        AuthorArticleList.as_view(), name='article-list-by-author'),
-
-    re_path(r'^category/(?P<category>\w[-\w]*)/',
-        CategoryArticleList.as_view(), name='article-list-by-category'),
-    re_path(r'^category/(?P<category>\w[-\w]*)/feed/',
-        CategoryFeed(), name='article-list-by-category-feed'),
-
-    re_path(r'^tag/(?P<tag>\w[-\w]*)/',
-        TagArticleList.as_view(), name='article-list-by-tag'),
-    re_path(r'^tag/(?P<tag>\w[-\w]*)/feed/',
-        TagFeed(), name='article-list-by-tag-feed'),
-
-    # These support permalinks with <article_slug>
-    re_path(r'^(?P<slug>\w[-\w]*)/',
-        ArticleDetail.as_view(), name='article-detail'),
-
-]
-
-urlpatterns += [
-    re_path(r'^(?P<slug>.*)/$',
-        ArticleDetail.as_view(), name='article-detail'),
     re_path(r'^(?P<year>\d{4})/(?P<slug>.*)/$',
         ArticleDetail.as_view(), name='article-detail'),
     re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>.*)/$',
         ArticleDetail.as_view(), name='article-detail'),
-    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>.*)/$',
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>.*)/$',  # flake8: NOQA
         ArticleDetail.as_view(), name='article-detail'),
+
+    re_path(r'^author/(?P<author>\w[-\w]*)/',
+        AuthorArticleList.as_view(), name='article-list-by-author'),
 
     re_path(r'^category/(?P<category>.*)/$',
         CategoryArticleList.as_view(), name='article-list-by-category'),
@@ -77,14 +58,8 @@ urlpatterns += [
         TagArticleList.as_view(), name='article-list-by-tag'),
     re_path(r'^tag/(?P<tag>.*)/feed/$',
         TagFeed(), name='article-list-by-tag-feed'),
+
+    # These support permalinks with <article_slug>
+    re_path(r'^(?P<slug>.*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
 ]
-
-urlpatterns.insert(0,
-    re_path(r'^category/no_category/$',
-        NoCategoryArticleList.as_view(), name='article-list-by-no-category')
-)
-
-urlpatterns.insert(0,
-    re_path(r'^tag/no_tag/$',
-        NoTagArticleList.as_view(), name='article-list-by-no-tag')
-)
