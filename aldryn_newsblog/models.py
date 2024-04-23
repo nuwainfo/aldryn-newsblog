@@ -10,6 +10,7 @@ from django.db import connection, models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 from django.utils.encoding import force_text
 from django.utils.timezone import now
 from django.utils.translation import override, ugettext
@@ -224,7 +225,10 @@ class Article(TranslatedAutoSlugifyMixin,
             namespace = ''
 
         with override(language):
-            return reverse('{0}article-detail'.format(namespace), kwargs=kwargs)
+            try:
+                return reverse('{0}article-detail'.format(namespace), kwargs=kwargs)
+            except NoReverseMatch:
+                return reverse('aldryn_newsblog:article-detail', kwargs=kwargs)
 
     def get_search_data(self, language=None, request=None):
         """
