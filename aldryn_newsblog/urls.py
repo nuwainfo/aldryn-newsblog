@@ -4,11 +4,13 @@ from aldryn_newsblog.feeds import CategoryFeed, LatestArticlesFeed, TagFeed
 from aldryn_newsblog.views import (
     ArticleDetail, ArticleList, ArticleSearchResultsList, AuthorArticleList,
     CategoryArticleList, DayArticleList, MonthArticleList, NoCategoryArticleList,
-    NoTagArticleList, TagArticleList, YearArticleList,
+    NoTagArticleList, TagArticleList, YearArticleList, LatestArticlePreview,
 )
 
 
 urlpatterns = [
+    re_path(r'^latest/preview/$', LatestArticlePreview.as_view(), name='article-latest-preview'),
+    
     path('',
         ArticleList.as_view(), name='article-list'),
 
@@ -23,12 +25,12 @@ urlpatterns = [
     re_path(r'^search/',
         ArticleSearchResultsList.as_view(), name='article-search'),
 
-    re_path(r'^(?P<year>\d{4})/',
-        YearArticleList.as_view(), name='article-list-by-year'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/',
+            DayArticleList.as_view(), name='article-list-by-day'),
     re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/',
         MonthArticleList.as_view(), name='article-list-by-month'),
-    re_path(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/',
-        DayArticleList.as_view(), name='article-list-by-day'),
+    re_path(r'^(?P<year>\d{4})/',
+        YearArticleList.as_view(), name='article-list-by-year'),
 
     # Various permalink styles that we support
     # ----------------------------------------
