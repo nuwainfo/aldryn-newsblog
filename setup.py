@@ -7,9 +7,9 @@ from aldryn_newsblog import __version__
 REQUIREMENTS = [
     'Django>=1.11',
     'python-dateutil',
-    'aldryn-apphooks-config>=0.5.2',
+    'aldryn-apphooks-config>=0.7.1',
     'aldryn-boilerplates>=0.8.0',
-    'aldryn-categories>=1.2.0',
+    'aldryn-categories>=1.2.0.2',
     'aldryn-common>=1.0.5',
     'aldryn-people>=2.2.0',
     'aldryn-translation-tools>=0.3.0',
