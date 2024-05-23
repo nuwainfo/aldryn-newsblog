@@ -62,9 +62,10 @@ class NewsBlogToolbar(CMSToolbar):
         config = self.__get_newsblog_config()
 
         if not config:
-            config = get_apphook_configs(self.toolbar.obj)
-            config = config[0] if config else config
-        
+            if self.toolbar.obj:
+                config = get_apphook_configs(self.toolbar.obj)
+                config = config[0] if config else config
+
         if not config:
             # Do nothing if there is no NewsBlog app_config to work with
             return
