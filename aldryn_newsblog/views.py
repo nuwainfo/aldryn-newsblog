@@ -10,9 +10,9 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
-from django.utils.http import urlquote as django_urlquote
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+from urllib.parse import quote
 
 from menus.utils import set_language_changer
 
@@ -117,7 +117,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
             self.object = self.get_object()
         set_language_changer(request, self.object.get_absolute_url)
         url = self.object.get_absolute_url()
-        if (self.config.non_permalink_handling == 200 or django_urlquote(request.path) == url):
+        if (self.config.non_permalink_handling == 200 or quote(request.path) == url):
             # Continue as normal
             return super(ArticleDetail, self).get(request, *args, **kwargs)
 
@@ -476,5 +476,5 @@ class LatestArticlePreview(ArticleListBase):
         qs = super(LatestArticlePreview, self).get_queryset()
         article = qs.latest('id')
         url = get_object_preview_url(article, language=language)
-        
+
         return redirect(url)

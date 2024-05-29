@@ -7,7 +7,7 @@ import time
 
 from django.core.cache import cache
 from django.urls import reverse
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import override
 
 from cms import api
@@ -73,7 +73,7 @@ class TestArchivePlugin(TestAppConfigPluginsBase):
             article = self.create_article(publishing_date=d)
             articles.append(article)
         response = self.client.get(self.plugin_page.get_absolute_url())
-        response_content = force_text(response.content)
+        response_content = force_str(response.content)
         needle = '<a href="/en/page/{year}/{month}/"[^>]*>'
         '[^<]*<span class="badge">{num}</span>'
         month1 = needle.format(year=2014, month=11, num=2)
@@ -135,7 +135,7 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
-        response_content = force_text(response.content)
+        response_content = force_str(response.content)
         # This pattern tries to accommodate all the templates from all the
         # versions of this package.
         pattern = '<a href="{url}">\s*</a>'  # noqa: #W605
@@ -189,7 +189,7 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
-        response_content = force_text(response.content)
+        response_content = force_str(response.content)
         # We use two different patterns in alternation because different
         # versions of newsblog have different templates
         pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'  # noqa: #W605
@@ -408,6 +408,6 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
-        response_content = force_text(response.content)
+        response_content = force_str(response.content)
         self.assertRegexpMatches(response_content, 'tag1\s*<span[^>]*>3</span>')  # noqa: #W605
         self.assertRegexpMatches(response_content, 'tag2\s*<span[^>]*>5</span>')  # noqa: #W605

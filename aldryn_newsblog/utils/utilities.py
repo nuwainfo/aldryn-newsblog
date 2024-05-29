@@ -10,7 +10,7 @@ from django.db import models
 from django.test import RequestFactory
 from django.urls import NoReverseMatch, reverse
 from django.utils import translation
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import strip_tags as _strip_tags
 from django.utils.text import smart_split
 
@@ -73,7 +73,7 @@ def strip_tags(value):
 
 
 def get_cleaned_bits(data):
-    decoded = force_text(data)
+    decoded = force_str(data)
     stripped = strip_tags(decoded)
     return smart_split(stripped)
 

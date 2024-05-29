@@ -79,7 +79,7 @@ def create_default_newsblog_config(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cms', '0003_auto_20140926_2347'),
+        ('cms', '0035_auto_20230822_2208'),
         ('aldryn_newsblog', '0006_auto_20160105_1013'),
     ]
 
