@@ -199,3 +199,6 @@ def get_valid_languages(namespace, language_code, site_id=None):
         lang_code for lang_code in langs
         if is_valid_namespace_for_language(namespace, lang_code)]
     return valid_translations
+
+def isAjax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'

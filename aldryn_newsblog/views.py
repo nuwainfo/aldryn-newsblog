@@ -29,7 +29,7 @@ from aldryn_newsblog.compat import toolbar_edit_mode_active
 from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 
 from .models import Article
-from .utils import add_prefix_to_path
+from .utils import add_prefix_to_path, isAjax
 
 
 class TemplatePrefixMixin(object):
@@ -298,7 +298,7 @@ class ArticleSearchResultsList(ArticleListBase):
         return cxt
 
     def get_template_names(self):
-        if self.request.is_ajax:
+        if isAjax(self.request):
             template_names = [self.partial_name]
         else:
             template_names = [self.template_name]
